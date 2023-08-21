@@ -62,9 +62,17 @@ void write_text_file(const fs::path& output_dir, int width,
 
     for (const auto& ecc : event.eccentricity())
       ofs << "# e" << ecc.first << "    = " << ecc.second << '\n';
+
+      ofs << "# grid-step = " << event.dxy() << '\n'
+          << "# grid-nsteps = " << event.nsteps() << '\n'
+          << "# grid-max = " << event.xymax() << '\n'
+          << "# grid-step-eta = " << event.deta() << '\n'
+          << "# grid-nsteps-eta = " << event.nsteps() << '\n'
+          << "# grid-max-eta = " << event.etamax() << '\n';
   }
 
-  // Write IC profile as a block grid.  Use C++ default float format (not
+
+    // Write IC profile as a block grid.  Use C++ default float format (not
   // fixed-width) so that trailing zeros are omitted.  This significantly
   // increases output speed and saves disk space since many grid elements are
   // zero.
