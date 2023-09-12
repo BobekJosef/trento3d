@@ -70,6 +70,8 @@ class Nucleus {
 
   /// Sample a new ensemble of nucleon positions with the given offset in the
   /// x-direction.
+
+  void sample_nucleons_angantyr(std::vector<double> A_x, std::vector<double> A_y);
   void sample_nucleons(double offset);
 
   using size_type = std::vector<Nucleon>::size_type;
@@ -133,6 +135,14 @@ class Nucleus {
 //     with the required number of nucleons.
 //   - Override and implement the pure virtual functions
 //     radius() and sample_nucleons_impl().
+
+class AngantyrNucleus : public Nucleus {
+ public:
+  AngantyrNucleus(std::size_t A);
+  virtual double radius() const override;
+ private:
+  virtual void sample_nucleons_impl() override;
+};
 
 /// Trivial nucleus with a single nucleon.
 class Proton : public Nucleus {

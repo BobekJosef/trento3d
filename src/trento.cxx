@@ -271,7 +271,7 @@ int main(int argc, char* argv[]) {
 
     // Go!
     Collider collider{var_map};
-    collider.run_events();
+    collider.run_events_angantyr();
   }
   catch (const po::required_option&) {
     // Handle this exception separately from others.

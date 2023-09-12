@@ -8,6 +8,10 @@
 
 #include <memory>
 
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/program_options/variables_map.hpp>
+
 #include "fwd_decl.h"
 #include "event.h"
 #include "nucleon.h"
@@ -41,6 +45,7 @@ class Collider {
   ~Collider();
 
   /// Run events and output.
+  void run_events_angantyr();
   void run_events();
 
  private:
@@ -56,10 +61,12 @@ class Collider {
   NucleonProfile nucleon_profile_;
 
   /// Number of events to run.
-  const int nevents_;
+  int nevents_;
 
   /// Minimum and maximum impact parameter.
-  const double bmin_, bmax_;
+  double bmin_, bmax_;
+
+  const fs::path& output_path;
 
   /// Parameterizes the degree of asymmetry between the two projectiles.  Used
   /// to apportion the total impact parameter to each projectile so that the
@@ -77,7 +84,7 @@ class Collider {
   /// each would be offset by half the impact parameter.  A proton-lead system
   /// would have asymmetry = 1, meaning the lead nucleus would be offset by the
   /// entire impact parameter and the proton would not be offset at all.
-  const double asymmetry_;
+  double asymmetry_;
 
   /// The event instance.
   Event event_;

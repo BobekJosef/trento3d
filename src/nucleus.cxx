@@ -26,6 +26,7 @@
 
 namespace trento {
 
+
 NucleusPtr Nucleus::create(const std::string& species, double nucleon_dmin) {
   // W-S params ref. in header
   // XXX: remember to add new species to the help output in main() and the readme
@@ -65,6 +66,14 @@ NucleusPtr Nucleus::create(const std::string& species, double nucleon_dmin) {
     return NucleusPtr{new DeformedWoodsSaxonNucleus{
       238, 6.67, 0.440, 0.280, 0.093, nucleon_dmin
     }};
+  else if (species[0] == '#')
+  {
+      size_t pos = 1;
+      while (pos < species.size() && isdigit(species[pos])) {pos++;}
+      std::string A_string = species.substr(1, pos - 1);
+      std::size_t A = std::stoull(A_string);
+      return NucleusPtr{new AngantyrNucleus{A}};
+  }
   // Read nuclear configurations from HDF5.
   else if (hdf5::filename_is_hdf5(species)) {
 #ifdef TRENTO_HDF5
@@ -79,15 +88,34 @@ NucleusPtr Nucleus::create(const std::string& species, double nucleon_dmin) {
 
 Nucleus::Nucleus(std::size_t A) : nucleons_(A), offset_(0) {}
 
+void Nucleus::sample_nucleons_angantyr(std::vector<double> A_x, std::vector<double> A_y) {
+    offset_ = 0.0;
+    int index = 0;
+    for (iterator nucleon = begin(); nucleon != end(); ++nucleon) {
+        set_nucleon_position(nucleon, A_x[index], A_y[index], 0.0);
+        index++;
+    }
+
+}
+
 void Nucleus::sample_nucleons(double offset) {
   offset_ = offset;
   sample_nucleons_impl();
 }
 
-void Nucleus::set_nucleon_position(
-    iterator nucleon, double x, double y, double z) {
+
+
+void Nucleus::set_nucleon_position(iterator nucleon, double x, double y, double z) {
   nucleon->set_position(x + offset_, y, z);
 }
+
+AngantyrNucleus::AngantyrNucleus(std::size_t A) : Nucleus(A) {}
+
+double AngantyrNucleus::radius() const {
+    return 0.;
+}
+
+void AngantyrNucleus::sample_nucleons_impl() { }
 
 Proton::Proton() : Nucleus(1) {}
 

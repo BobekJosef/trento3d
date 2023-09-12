@@ -100,6 +100,9 @@ class Event {
   const int& nsteps() const
   { return nsteps_; }
 
+  const int& neta() const
+  { return neta_; }
+
   const double& xymax() const
   { return xymax_; }
 
