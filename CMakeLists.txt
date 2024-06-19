@@ -59,7 +59,7 @@ message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 # Set default architecture flags to optimize for the current system,
 # but don't override user settings.
 if(NOT CMAKE_CXX_FLAGS MATCHES "-march|-mtune")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
 # warnings adapted from http://stackoverflow.com/a/9862800
